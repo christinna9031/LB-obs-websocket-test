@@ -1,0 +1,60 @@
+[extension_name]
+Obs Websocket Test
+[insert_external]
+<!--
+ * @name: OBS Websocket Test, @version: 1.0, @author: Christinna#9031
+ * @link: https://github.com/christinna9031/LB-obs-websocket-test
+ * -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/obs-websocket-js@4.0.2/dist/obs-websocket.js"></script>
+<div><p>OBS websocket test extension is installed. </p></div>
+[insert_command]
+lioranboardclient.send('{"type":"MESSAGE","topic":"ExtensionCommand","name":"OBS websocket test","boxcount":2,"boxname1":"port","boxtype1":"string","boxname2":"websocket_password","boxtype2":"string"}');  
+
+[insert_hook]
+case "OBSwebsockettest":{  
+    LBOBSW (LioranBoardJSON.port, LioranBoardJSON.websocket_password)
+    }break
+[insert_script]
+function LBOBSW(port, pw) {
+    const obs = new OBSWebSocket();
+  
+    obs.connect({
+      address: "localhost:"+port,
+      password: pw
+    });
+  
+   obs.on('AuthenticationSuccess', () => {
+        console.log("Connected to OBS Websocket.");
+      LBAlert("Connected to OBS Websocket.")
+      obs.send('GetVersion')
+        .then(data => {
+          if (data.status == "ok") {
+            console.log(data);
+            console.log(data["obs-websocket-version"])
+            LBAlert("OBS websocket version is "+data["obs-websocket-version"])
+            LBAlert("OBS websocket status is "+data.status)
+          } else {
+            console.log(data.error)
+          }
+        }, error => {
+            console.log("OBS websocket error: "+error)
+            LBAlert("OBS websocket error: "+error)
+        })
+    })
+
+    obs.on('ConnectionClosed',() => {
+        console.log("OBS websocket connection closed.")
+        LBAlert("OBS websocket connection closed.")
+
+    })
+
+    obs.on('error', err => {
+    console.error('OBS websocket error: ', err);
+    LBAlert('OBS websocket error: ', err)
+    })
+
+    function LBAlert(msg) {
+      lioranboardclient.send('{"type":"MESSAGE","topic":"AlertMessage","message":"' + msg + '"}')
+    
+  }}
+[insert_over]
