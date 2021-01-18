@@ -1,6 +1,10 @@
 # LB OBS Websocket Test
- Extension for LioranBoard which lets you test connection to your OBS websocket, in case you cannot normally connect from LioranBoard.
-
+ Extension for LioranBoard which lets you test connection to your OBS websocket, in case you cannot normally connect from LioranBoard. 
+ 1. Create a new button with the extension command and fill out the necessary fields. Leave password field empty if you did not set one up in your OBS websocket settings.
+ 2. Press the button. You should see three yellow notification messages in your Receiver, indicating the connection status and websocket version. If it says "Connection closed" or "Disconnected", your OBS websocket is not properly installed. If you can connect just fine, there must be something preventing LB from connecting to your websocket (old obs websocekt version, wrong settings, antivirus/firewall blocking it etc.). 
+ 
+ ![Imgur example](https://i.imgur.com/9WEBeWY.png) 
+ 
 
 
 **How to install an extension:**
